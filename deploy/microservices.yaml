@@ -12,7 +12,7 @@
 
     "applicationInsightsName": "[concat(variables('resourceNamePrefix'), 'ai', parameters('uniqueResourceNameSuffix'))]",
     "functionsAppServicePlanName": "[concat(variables('resourceNamePrefix'), 'fnasp', parameters('uniqueResourceNameSuffix'))]",
-    "functionsApiAppName": "meatgeek-device"
+    "functionsApiAppName": "meatgeek-deviceapi"
   },
   "resources": [
     {
@@ -25,7 +25,6 @@
         "applicationId": "[variables('applicationInsightsName')]"
       }
     },
-
     {
       "name": "[variables('functionsAppServicePlanName')]",
       "type": "Microsoft.Web/serverfarms",
