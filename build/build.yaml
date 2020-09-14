@@ -3,6 +3,8 @@
 name: $(BuildID)
 steps:
   # Build the APIs
+  - task: NuGetAuthenticate@0
+    inputs:
   - task: DotNetCoreCLI@1
     displayName: Run dotnet restore
     inputs:
