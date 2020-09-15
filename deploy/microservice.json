@@ -24,6 +24,7 @@
         "applicationId": "[variables('applicationInsightsName')]"
       }
     },
+
     {
       "name": "[variables('functionsAppServicePlanName')]",
       "type": "Microsoft.Web/serverfarms",
@@ -69,19 +70,27 @@
           "properties": {
             "FUNCTIONS_EXTENSION_VERSION": "beta",
             "APPINSIGHTS_INSTRUMENTATIONKEY": "[reference(resourceId('Microsoft.Insights/components', variables('applicationInsightsName')), '2014-04-01').InstrumentationKey]",
+            // "EventGridTopicEndpoint": "[reference(variables('eventGridTopicResourceId'), '2018-01-01').endpoint]",
+            // "EventGridTopicKey": "[listKeys(variables('eventGridTopicResourceId'), '2018-01-01').key1]",
+            // "CognitiveServicesSearchApiEndpoint": "[variables('cognitiveServicesSearchApiUrl')]",
+            // "CognitiveServicesSearchApiKey": "[listKeys(variables('cognitiveServicesAccountName'),'2016-02-01-preview').key1]",
+            // "BigHugeThesaurusApiEndpoint": "[variables('bigHugeThesaurusApiUrl')]",
+            // "BigHugeThesaurusApiKey": "[parameters('bigHugeThesaurusApiKey')]",
             "AzureWebJobsSecretStorageType": "Files"
           },
           "dependsOn": [
             "[resourceId('Microsoft.Web/sites', variables('functionsApiAppName'))]",
             "[resourceId('Microsoft.Insights/components', variables('applicationInsightsName'))]"
+            // "[resourceId('Microsoft.CognitiveServices/accounts', variables('cognitiveServicesAccountName'))]"
           ]
         }
       ],
       "dependsOn": [
         "[resourceId('Microsoft.Web/serverfarms', variables('functionsAppServicePlanName'))]"
       ]
-    },
+    }
   ],
+  "outputs": {
     "apiAppName": {
       "type": "string",
       "value": "[variables('functionsApiAppName')]"
