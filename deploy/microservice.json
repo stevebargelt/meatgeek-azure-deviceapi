@@ -9,7 +9,6 @@
   },
   "variables": {
     "resourceNamePrefix": "mgdevapi",
-
     "applicationInsightsName": "[concat(variables('resourceNamePrefix'), 'ai', parameters('uniqueResourceNameSuffix'))]",
     "functionsAppServicePlanName": "[concat(variables('resourceNamePrefix'), 'fnasp', parameters('uniqueResourceNameSuffix'))]",
     "functionsApiAppName": "meatgeek-deviceapi"
