@@ -1,23 +1,14 @@
 using System;
-using System.IO;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 using Microsoft.Azure.Relay;
-using Inferno.Common.Models;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Configuration.AzureAppConfiguration;
 
-using Honeycomb;
 
 namespace Infero.Function
 {
@@ -28,20 +19,6 @@ namespace Infero.Function
         private static string ConnectionName;
         private static string KeyName;
         private static string Key;
-        private static string HoneycombKey;
-        private static string HoneycombDataset;
-        private static LibHoney _libHoney;
-
-        static GetStatus()
-        {
-            var builder = new ConfigurationBuilder();
-            var connString = Environment.GetEnvironmentVariable("APP_CONFIG_CONN_STRING", EnvironmentVariableTarget.Process);
-            builder.AddAzureAppConfiguration(connString);
-            Configuration = builder.Build();
-            HoneycombKey = Configuration["HoneycombKey"];
-            HoneycombDataset = Configuration["HoneycombDataset"];
-            _libHoney = new LibHoney(HoneycombKey, HoneycombDataset);
-        }
 
         [FunctionName("status")]
         public static async Task<IActionResult> Run(
@@ -50,10 +27,10 @@ namespace Infero.Function
         {
             
             log.LogInformation("C# HTTP trigger function processed a request.");
-            RelayNamespace = Configuration["RelayNamespace"];
-            ConnectionName = Configuration["RelayConnectionName"];
-            KeyName = Configuration["RelayKeyName"];
-            Key = Configuration["RelayKey"];
+            RelayNamespace = Environment.GetEnvironmentVariable("RelayNamespace", EnvironmentVariableTarget.Process);
+            ConnectionName = Environment.GetEnvironmentVariable("RelayConnectionName", EnvironmentVariableTarget.Process);
+            KeyName = Environment.GetEnvironmentVariable("RelayKeyName", EnvironmentVariableTarget.Process);
+            Key = Environment.GetEnvironmentVariable("RelayKey", EnvironmentVariableTarget.Process);
 
             // Begin
             HttpClient client = HttpClientFactory.Create();
@@ -66,20 +43,7 @@ namespace Infero.Function
 
             await AddAuthToken(request);
 
-            var stopWatch = new Stopwatch();
-            stopWatch.Start();
             var response = await client.SendAsync(request);
-            stopWatch.Stop();
-
-            _libHoney.SendNow (new Dictionary<string, object> () {
-                ["name"] = "status",
-                ["service_name"] = "GetStatus",
-                ["duration_ms"] = stopWatch.ElapsedMilliseconds,
-                ["method"] = "get",
-                ["status_code"] = response.StatusCode,
-                ["azFunction"] = "GetStatus",
-                ["endpoint"] = baseUri + "status",
-            });
 
             if (response.IsSuccessStatusCode)
             {
@@ -101,7 +65,6 @@ namespace Infero.Function
 
             request.Headers.Add("ServiceBusAuthorization", token);
         }
-
 
     }
 }

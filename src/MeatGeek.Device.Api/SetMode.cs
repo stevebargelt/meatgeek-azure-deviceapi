@@ -24,14 +24,6 @@ namespace Inferno.Functions
         private static string KeyName;
         private static string Key;
 
-        static SetMode()
-        {
-            var builder = new ConfigurationBuilder();
-            var connString = Environment.GetEnvironmentVariable("APP_CONFIG_CONN_STRING", EnvironmentVariableTarget.Process);
-            builder.AddAzureAppConfiguration(connString);
-            Configuration = builder.Build();
-        }
-
         [FunctionName("mode")]
         public static async Task<IActionResult> Run(
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)][FromBody] string value,
@@ -39,10 +31,10 @@ namespace Inferno.Functions
         {
             log.LogInformation("C# HTTP trigger function processed a request.");
 
-            RelayNamespace = Configuration["RelayNamespace"];
-            ConnectionName = Configuration["RelayConnectionName"];
-            KeyName = Configuration["RelayKeyName"];
-            Key = Configuration["RelayKey"];
+            RelayNamespace = Environment.GetEnvironmentVariable("RelayNamespace", EnvironmentVariableTarget.Process);
+            ConnectionName = Environment.GetEnvironmentVariable("RelayConnectionName", EnvironmentVariableTarget.Process);
+            KeyName = Environment.GetEnvironmentVariable("RelayKeyName", EnvironmentVariableTarget.Process);
+            Key = Environment.GetEnvironmentVariable("RelayKey", EnvironmentVariableTarget.Process);
             var baseUri = new Uri(string.Format("https://{0}/{1}/", RelayNamespace, ConnectionName));
 
             HttpResponseMessage response;
