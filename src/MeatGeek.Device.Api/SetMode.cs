@@ -18,7 +18,6 @@ namespace Inferno.Functions
 
     public static class SetMode
     {
-        private static IConfiguration Configuration { set; get; }
         private static string RelayNamespace;
         private static string ConnectionName;
         private static string KeyName;
