@@ -16,7 +16,7 @@ namespace Inferno.Functions
         public static async Task<IActionResult> Run(
         [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req, ILogger log)
         {
-            log.LogInformation("Performing health check on the Cosmos DB processing Function App.");
+            log.LogInformation("Performing health check on Device API Function App.");
 
             // TODO: This is a very simple health check that ensures each configuration setting exists and has a value.
             // More thorough checks would validate each value against an expected format or by connecting to each service as required.
