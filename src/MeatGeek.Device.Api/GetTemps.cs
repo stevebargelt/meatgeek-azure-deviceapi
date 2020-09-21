@@ -23,8 +23,8 @@ namespace MeatGeek.DeviceApi
 
         [FunctionName("temps")]
         public static async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "temps/{traceid?}/{parentspanid?}")] HttpRequest req,
-            ILogger log, string? traceid, string? parentspanid)
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "temps")] HttpRequest req,
+            ILogger log)
         {
             
             log.LogInformation("C# HTTP trigger function processed a request.");
