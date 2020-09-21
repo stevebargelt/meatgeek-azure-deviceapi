@@ -161,6 +161,7 @@
           "properties": {
             "FUNCTIONS_EXTENSION_VERSION": "~3",
             "FUNCTIONS_WORKER_RUNTIME": "dotnet",
+            "AzureWebJobsSecretStorageType": "Files",
             "APPINSIGHTS_INSTRUMENTATIONKEY": "[reference(resourceId('Microsoft.Insights/components', variables('applicationInsightsName')), '2014-04-01').InstrumentationKey]",
             "APPLICATIONINSIGHTS_CONNECTION_STRING": "[concat('InstrumentationKey=', reference(resourceId('Microsoft.Insights/components', variables('applicationInsightsName')), '2014-04-01').InstrumentationKey)]",
             "CosmosDBConnection": "@Microsoft.KeyVault(SecretUri=https://meatgeek-key-vault.vault.azure.net/secrets/CosmosDBConnection)",
@@ -168,7 +169,9 @@
             "RelayConnectionName": "@Microsoft.KeyVault(SecretUri=https://meatgeek-key-vault.vault.azure.net/secrets/RelayConnectionName/09182ac4a7e54b429fe84bd71b5b9389)",
             "RelayKey": "@Microsoft.KeyVault(SecretUri=https://meatgeek-key-vault.vault.azure.net/secrets/RelayKey/ed1fa6fafd75465bb7975b4416fd0882)",
             "RelayKeyName": "@Microsoft.KeyVault(SecretUri=https://meatgeek-key-vault.vault.azure.net/secrets/RelayKeyName/22e330913ea04dc38cc677d374926935)",
-            "RelayNamespace": "@Microsoft.KeyVault(SecretUri=https://meatgeek-key-vault.vault.azure.net/secrets/RelayNamespace/9a7365a48f104b7e8aa6c27f7e946ca2)"
+            "RelayNamespace": "@Microsoft.KeyVault(SecretUri=https://meatgeek-key-vault.vault.azure.net/secrets/RelayNamespace/9a7365a48f104b7e8aa6c27f7e946ca2)",
+            "WEBSITE_CONTENTAZUREFILECONNECTIONSTRING": "@Microsoft.KeyVault(SecretUri=https://meatgeek-key-vault.vault.azure.net/secrets/AzureWebJobStorage-DeviceApi/f2966037d1d9482aa5defbc00e194d12)",
+            "WEBSITE_CONTENTSHARE": "meatgeekdeviceapifunctionsapp"
           },
           "dependsOn": [
             "[resourceId('Microsoft.Web/sites', variables('functionsApiAppName'))]",
