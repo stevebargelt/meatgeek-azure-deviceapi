@@ -35,7 +35,7 @@ namespace MeatGeek.DeviceApi
             Key = Environment.GetEnvironmentVariable("RelayKey", EnvironmentVariableTarget.Process);
             var baseUri = new Uri(string.Format("https://{0}/{1}/", RelayNamespace, ConnectionName));
             
-            log.LogInformation("baserUri{0}", baseUri);
+            log.LogInformation("baserUri {0}", baseUri);
             
             HttpResponseMessage response;
             response = await SendRelayRequest(baseUri, "temps", HttpMethod.Get, "");
@@ -84,7 +84,6 @@ namespace MeatGeek.DeviceApi
         {
             TokenProvider tokenProvider = TokenProvider.CreateSharedAccessSignatureTokenProvider(KeyName, Key);
             string token = (await tokenProvider.GetTokenAsync(request.RequestUri.AbsoluteUri, TimeSpan.FromHours(1))).TokenString;
-
             request.Headers.Add("ServiceBusAuthorization", token);
         }
 
