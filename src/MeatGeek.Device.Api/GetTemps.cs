@@ -34,7 +34,9 @@ namespace MeatGeek.DeviceApi
             KeyName = Environment.GetEnvironmentVariable("RelayKeyName", EnvironmentVariableTarget.Process);
             Key = Environment.GetEnvironmentVariable("RelayKey", EnvironmentVariableTarget.Process);
             var baseUri = new Uri(string.Format("https://{0}/{1}/", RelayNamespace, ConnectionName));
-
+            
+            log.LogInformation("baserUri{0}", baseUri);
+            
             HttpResponseMessage response;
             response = await SendRelayRequest(baseUri, "temps", HttpMethod.Get, "");
             
