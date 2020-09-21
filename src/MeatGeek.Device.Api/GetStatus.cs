@@ -22,7 +22,7 @@ namespace Infero.Function
 
         [FunctionName("status")]
         public static async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = null)] HttpRequest req,
             ILogger log)
         {
             
@@ -35,13 +35,17 @@ namespace Infero.Function
             // Begin
             HttpClient client = HttpClientFactory.Create();
             var baseUri = new Uri(string.Format("https://{0}/{1}/", RelayNamespace, ConnectionName));
+            log.LogInformation("baserUri {0}", baseUri);
+
             var request = new HttpRequestMessage()
             {
                 RequestUri = new Uri(baseUri, "status"),
                 Method = HttpMethod.Get
             };
 
+            log.LogInformation("Attempted to get AuthToken...");
             await AddAuthToken(request);
+            log.LogInformation("After get AuthToken...");
 
             var response = await client.SendAsync(request);
 
