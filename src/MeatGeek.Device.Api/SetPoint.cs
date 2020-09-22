@@ -1,16 +1,9 @@
 using System;
-using System.IO;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
-using Microsoft.Azure.Relay;
-using System.Net.Http;
-using Inferno.Common.Models;
-using Microsoft.Extensions.Configuration;
 
 using Microsoft.Azure.Devices;
 
@@ -30,11 +23,15 @@ namespace Inferno.Functions
             log.LogInformation("C# HTTP trigger function processed a request.");
 
             ServiceConnectionString = Environment.GetEnvironmentVariable("InfernoIoTServiceConnection", EnvironmentVariableTarget.Process);
-
             IoTHubServiceClient = ServiceClient.CreateFromConnectionString(ServiceConnectionString);
-
             log.LogInformation("value = " + value);
+          
 
+            if (string.IsNullOrEmpty(value)) // TODO: Check value for vaild range... 180 - 400 or whatever.
+            {
+                return new BadRequestObjectResult("Missing body value. Body should be a single integer.");
+            }
+            
             var methodInvocation = new CloudToDeviceMethod("SmokerSetPoint") { ResponseTimeout = TimeSpan.FromSeconds(30) };
             methodInvocation.SetPayloadJson(value);
 
