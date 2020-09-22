@@ -11,18 +11,16 @@ using Microsoft.Azure.Relay;
 using System.Net.Http;
 using Inferno.Common.Models;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Configuration.AzureAppConfiguration;
+
+using Microsoft.Azure.Devices;
 
 namespace Inferno.Functions
 {
 
     public static class SetPoint
     {
-        private static IConfiguration Configuration { set; get; }
-        private static string RelayNamespace;
-        private static string ConnectionName;
-        private static string KeyName;
-        private static string Key;
+        private static ServiceClient IoTHubServiceClient;
+        private static string ServiceConnectionString;
 
         [FunctionName("setpoint")]
         public static async Task<IActionResult> Run(
@@ -31,63 +29,36 @@ namespace Inferno.Functions
         {
             log.LogInformation("C# HTTP trigger function processed a request.");
 
-            RelayNamespace = Environment.GetEnvironmentVariable("RelayNamespace", EnvironmentVariableTarget.Process);
-            ConnectionName = Environment.GetEnvironmentVariable("RelayConnectionName", EnvironmentVariableTarget.Process);
-            KeyName = Environment.GetEnvironmentVariable("RelayKeyName", EnvironmentVariableTarget.Process);
-            Key = Environment.GetEnvironmentVariable("RelayKey", EnvironmentVariableTarget.Process);
-            var baseUri = new Uri(string.Format("https://{0}/{1}/", RelayNamespace, ConnectionName));
+            ServiceConnectionString = Environment.GetEnvironmentVariable("InfernoIoTServiceConnection", EnvironmentVariableTarget.Process);
 
-            HttpResponseMessage response;
+            IoTHubServiceClient = ServiceClient.CreateFromConnectionString(ServiceConnectionString);
 
             log.LogInformation("value = " + value);
-            response = await SendRelayRequest(baseUri, "setpoint", HttpMethod.Post, value);
 
-            if (response.IsSuccessStatusCode)
-            {
-                log.LogInformation("response.IsSuccessStatusCode PASSED");
-                string payload = await response.Content.ReadAsStringAsync();
-                return new OkObjectResult(payload);
-            }
-            else
-            {
-                log.LogInformation("response.IsSuccessStatusCode FAILED");
-                return new BadRequestObjectResult(response.ReasonPhrase);
-            }
+            var methodInvocation = new CloudToDeviceMethod("SmokerSetPoint") { ResponseTimeout = TimeSpan.FromSeconds(30) };
+            methodInvocation.SetPayloadJson("value");
 
-        }
+            // Invoke the direct method asynchronously and get the response from the simulated device.
+            var response = await IoTHubServiceClient.InvokeDeviceMethodAsync("inferno1", methodInvocation);
 
-        // ************************************************************
-        // The following should be broken out into a seperate class/obj
-        // ************************************************************
-        private static async Task<HttpResponseMessage> SendRelayRequest(Uri baseUri, string apiEndpoint, HttpMethod method, string payload = "")
-        {
-            HttpClient client = HttpClientFactory.Create();
-            var request = new HttpRequestMessage()
-            {
-                RequestUri = new Uri(baseUri, apiEndpoint),
-                Method = method
-            };
+            Console.WriteLine("Response status: {0}, payload:", response.Status);
+            Console.WriteLine(response.GetPayloadAsJson());
 
-            if (method == HttpMethod.Post)
-            {
-                request.Content = new StringContent(payload);
-                request.Content.Headers.ContentType.MediaType = "application/json";
-                request.Content.Headers.ContentType.CharSet = null;
-            }
+            log.LogInformation("Response status: {0}, payload:", response.Status);
+            log.LogInformation(response.GetPayloadAsJson());
+            return new ObjectResult(response);
 
-            await AddAuthToken(request);
+            // if (response.Status)
+            // {
+            //     log.LogInformation("response.IsSuccessStatusCode PASSED");
+            //     return new OkObjectResult(response.GetPayloadAsJson());
+            // }
+            // else
+            // {
+            //     log.LogInformation("response.IsSuccessStatusCode FAILED");
+            //     return new BadRequestObjectResult(response.ReasonPhrase);
+            // }
 
-            var response = await client.SendAsync(request);
-
-            return response;
-        }
-
-        private static async Task AddAuthToken(HttpRequestMessage request)
-        {
-            TokenProvider tokenProvider = TokenProvider.CreateSharedAccessSignatureTokenProvider(KeyName, Key);
-            string token = (await tokenProvider.GetTokenAsync(request.RequestUri.AbsoluteUri, TimeSpan.FromHours(1))).TokenString;
-
-            request.Headers.Add("ServiceBusAuthorization", token);
         }
 
     }
