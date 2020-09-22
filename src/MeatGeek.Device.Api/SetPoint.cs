@@ -36,7 +36,7 @@ namespace Inferno.Functions
             log.LogInformation("value = " + value);
 
             var methodInvocation = new CloudToDeviceMethod("SmokerSetPoint") { ResponseTimeout = TimeSpan.FromSeconds(30) };
-            methodInvocation.SetPayloadJson("value");
+            methodInvocation.SetPayloadJson(value);
 
             // Invoke the direct method asynchronously and get the response from the simulated device.
             var response = await IoTHubServiceClient.InvokeDeviceMethodAsync("inferno1", methodInvocation);
