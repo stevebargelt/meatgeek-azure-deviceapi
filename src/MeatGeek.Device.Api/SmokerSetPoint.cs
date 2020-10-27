@@ -31,7 +31,7 @@ namespace Inferno.Functions
                 return new BadRequestObjectResult("Missing body value. Body should be a single integer.");
             }
             
-            var methodInvocation = new CloudToDeviceMethod("SmokerSEtPoint") { ResponseTimeout = TimeSpan.FromSeconds(30) };
+            var methodInvocation = new CloudToDeviceMethod("SmokerSetPoint") { ResponseTimeout = TimeSpan.FromSeconds(30) };
             methodInvocation.SetPayloadJson(value);
 
             // Invoke the direct method asynchronously and get the response from the device.
