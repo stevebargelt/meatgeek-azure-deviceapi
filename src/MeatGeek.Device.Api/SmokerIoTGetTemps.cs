@@ -28,12 +28,7 @@ namespace Inferno.Functions
             var methodInvocation = new CloudToDeviceMethod("SmokerGetTemps") { ResponseTimeout = TimeSpan.FromSeconds(30) };
             // Invoke the direct method asynchronously and get the response from the device.
             var response = await IoTHubServiceClient.InvokeDeviceMethodAsync("inferno1", methodInvocation);
-
-            Console.WriteLine("Response status: {0}, payload:", response.Status);
-            Console.WriteLine(response.GetPayloadAsJson());
-
-            log.LogInformation("Response status: {0}, payload:", response.Status);
-            log.LogInformation(response.GetPayloadAsJson());
+            log.LogInformation("Response status: {0}, payload: {1}", response.Status, response.GetPayloadAsJson());
             return new ObjectResult(response.GetPayloadAsJson());
         }
     }
