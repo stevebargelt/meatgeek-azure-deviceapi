@@ -42,7 +42,7 @@ namespace Inferno.Functions
 
             log.LogInformation("Response status: {0}, payload:", response.Status);
             log.LogInformation(response.GetPayloadAsJson());
-            return new ObjectResult(response);
+            return new ObjectResult(response.GetPayloadAsJson());
 
         }
 
