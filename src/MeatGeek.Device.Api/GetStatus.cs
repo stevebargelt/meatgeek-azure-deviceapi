@@ -20,7 +20,7 @@ namespace Infero.Function
         private static string KeyName;
         private static string Key;
 
-        [FunctionName("status")]
+        [FunctionName("relaystatus")]
         public static async Task<IActionResult> Run(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = null)] HttpRequest req,
             ILogger log)
