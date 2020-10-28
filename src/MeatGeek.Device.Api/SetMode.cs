@@ -23,7 +23,7 @@ namespace Inferno.Functions
         private static string KeyName;
         private static string Key;
 
-        [FunctionName("mode")]
+        [FunctionName("relaymode")]
         public static async Task<IActionResult> Run(
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)][FromBody] string value,
             ILogger log)

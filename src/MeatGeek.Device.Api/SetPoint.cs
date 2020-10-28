@@ -15,7 +15,7 @@ namespace Inferno.Functions
         private static ServiceClient IoTHubServiceClient;
         private static string ServiceConnectionString;
 
-        [FunctionName("setpoint")]
+        [FunctionName("relaysetpoint")]
         public static async Task<IActionResult> Run(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)][FromBody] string value,
             ILogger log)

@@ -9,13 +9,12 @@ using Microsoft.Azure.Devices;
 
 namespace Inferno.Functions
 {
-
-    public static class SmokerSetPoint
+    public static class IoTSetMode
     {
         private static ServiceClient IoTHubServiceClient;
         private static string ServiceConnectionString;
 
-        [FunctionName("smokersetpoint")]
+        [FunctionName("mode")]
         public static async Task<IActionResult> Run(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)][FromBody] string value,
             ILogger log)
@@ -31,7 +30,7 @@ namespace Inferno.Functions
                 return new BadRequestObjectResult("Missing body value. Body should be a single integer.");
             }
             
-            var methodInvocation = new CloudToDeviceMethod("SmokerSetPoint") { ResponseTimeout = TimeSpan.FromSeconds(30) };
+            var methodInvocation = new CloudToDeviceMethod("SmokerSetMode") { ResponseTimeout = TimeSpan.FromSeconds(30) };
             methodInvocation.SetPayloadJson(value);
 
             // Invoke the direct method asynchronously and get the response from the device.
