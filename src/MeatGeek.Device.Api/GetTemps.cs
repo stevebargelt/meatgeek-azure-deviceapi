@@ -21,9 +21,9 @@ namespace MeatGeek.DeviceApi
         private static string Key;
 
 
-        [FunctionName("temps")]
+        [FunctionName("relaytemps")]
         public static async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "temps")] HttpRequest req,
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "relaytemps")] HttpRequest req,
             ILogger log)
         {
             
