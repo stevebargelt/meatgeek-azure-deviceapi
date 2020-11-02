@@ -172,7 +172,8 @@
             "RelayNamespace": "@Microsoft.KeyVault(SecretUri=https://meatgeek-key-vault.vault.azure.net/secrets/RelayNamespace/9a7365a48f104b7e8aa6c27f7e946ca2)",
             "WEBSITE_CONTENTAZUREFILECONNECTIONSTRING": "@Microsoft.KeyVault(SecretUri=https://meatgeek-key-vault.vault.azure.net/secrets/AzureWebJobStorage-DeviceApi/f2966037d1d9482aa5defbc00e194d12)",
             "WEBSITE_CONTENTSHARE": "meatgeekdeviceapifunctionsapp",
-            "InfernoIoTServiceConnection": "@Microsoft.KeyVault(SecretUri=https://meatgeek-key-vault.vault.azure.net/secrets/InfernoIoTServiceConnection/f0841ed18ade4583a679ab932b079982)"
+            "InfernoIoTServiceConnection": "@Microsoft.KeyVault(SecretUri=https://meatgeek-key-vault.vault.azure.net/secrets/InfernoIoTServiceConnection/f0841ed18ade4583a679ab932b079982)",
+            "MeatGeekIoTServiceConnection": "@Microsoft.KeyVault(SecretUri=https://meatgeek-key-vault.vault.azure.net/secrets/MeatGeekIoTServiceConnection/93bd1cd87ac34b86bc17820e96ac3460)"
           },
           "dependsOn": [
             "[resourceId('Microsoft.Web/sites', variables('functionsApiAppName'))]",
