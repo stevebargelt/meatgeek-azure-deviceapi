@@ -34,8 +34,9 @@ namespace Inferno.Functions
             var methodInvocation = new CloudToDeviceMethod("SetTelemetryInterval") { ResponseTimeout = TimeSpan.FromSeconds(30) };
             methodInvocation.SetPayloadJson(value);
 
+            //TODO: smokerID no hardcoded meatgeek2
             // Invoke the direct method asynchronously and get the response from the simulated device.
-            var response = await IoTHubServiceClient.InvokeDeviceMethodAsync("inferno1", methodInvocation);
+            var response = await IoTHubServiceClient.InvokeDeviceMethodAsync("meatgeek2", methodInvocation);
 
             Console.WriteLine("Response status: {0}, payload:", response.Status);
             Console.WriteLine(response.GetPayloadAsJson());

@@ -31,6 +31,7 @@ namespace Inferno.Functions
             // Invoke the direct method asynchronously and get the response from the device.
             var response = await IoTHubServiceClient.InvokeDeviceMethodAsync("inferno1", methodInvocation);
             log.LogInformation("Response status: {0}, payload: {1}", response.Status, response.GetPayloadAsJson());
+            log.LogInformation("Yes this is calling a C2D endpoint");
             log.LogInformation("END: Inferno IoT");
 
             // log.LogInformation("START: MeatGeek IoT");
